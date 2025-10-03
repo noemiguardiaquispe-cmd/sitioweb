@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Store - Complete Interface</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .mobile-container {
+            width: 100%;
+            max-width: 375px;
+            height: 812px;
+            background: linear-gradient(180deg, 
+                #ff9a9e 0%, 
+                #a8c8ec 30%, 
+                #e8e8e8 50%, 
+                #a8c8ec 70%, 
+                #ff9a9e 100%);
+            border-radius: 25px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Páginas */
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .page.hidden-left {
+            transform: translateX(-100%);
+        }
+
+        .page.hidden-right {
+            transform: translateX(100%);
+        }
+
+        /* Formas decorativas */
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+
+        .circle-top-left {
+            width: 140px;
+            height: 140px;
+            background: rgba(255, 154, 158, 0.85);
+            top: -20px;
+            left: -30px;
+        }
+
+        .circle-top-right {
+            width: 180px;
+            height: 180px;
+            background: rgba(232, 232, 232, 0.9);
+            top: -40px;
+            right: -60px;
+        }
+
+        .circle-bottom {
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 154, 158, 0.7);
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* ===== WELCOME PAGE ===== */
+        .welcome-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .welcome-text {
+            font-size: 28px;
+            font-weight: 800;
+            color: #8B5CF6;
+            margin-bottom: 80px;
+            letter-spacing: 1.5px;
+            line-height: 1.2;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            text-transform: uppercase;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .image-container {
+            width: 140px;
+            height: 100px;
+            background: #2D3748;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 80px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: scaleIn 0.6s ease-out 0.3s both;
+        }
+
+        .image-container:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+
+        .landscape-icon {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .mountain-1 {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 0;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-bottom: 35px solid #4A5568;
+        }
+
+        .mountain-2 {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 25px solid #4A5568;
+        }
+
+        .sun {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            width: 20px;
+            height: 20px;
+            background: #E2E8F0;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(226, 232, 240, 0.5);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .image-container:hover .sun {
+            box-shadow: 0 0 20px rgba(226, 232, 240, 0.8);
+        }
+
+        .cloud {
+            position: absolute;
+            top: 30px;
+            left: 25px;
+            width: 40px;
+            height: 15px;
+            background: #E2E8F0;
+            border-radius: 15px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .cloud::before,
+        .cloud::after {
+            content: '';
+            position: absolute;
+            background: #E2E8F0;
+            border-radius: 50%;
+        }
+
+        .cloud::before {
+            top: -8px;
+            left: 8px;
+            width: 20px;
+            height: 20px;
+        }
+
+        .cloud::after {
+            top: -12px;
+            right: 5px;
+            width: 25px;
+            height: 25px;
+        }
+
+        .shop-button {
+            background: rgba(255, 255, 255, 0.95);
+            color: #8B5CF6;
+            font-size: 20px;
+            font-weight: 700;
+            border: none;
+            border-radius: 30px;
+            padding: 18px 50px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(20px);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            min-width: 140px;
+            position: relative;
+            animation: fadeInUp 0.6s ease-out 0.6s both;
+        }
+
+        .shop-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        .shop-button:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+
+        /* ===== PROFILE PAGE ===== */
+        .profile-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .avatar-container {
+            margin-bottom: 30px;
+            animation: scaleIn 0.6s ease-out;
+        }
+
+        .avatar-bg {
+            width: 140px;
+            height: 140px;
+            background: linear-gradient(135deg, #7de3d6 0%, #5dd5c8 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .avatar-bg:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .avatar-icon {
+            font-size: 70px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .username {
+            color: #8b4d9e;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 50px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .stats-container {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+            animation: fadeInUp 0.6s ease-out 0.6s both;
+        }
+
+        .progress-circle {
+            position: relative;
+            width: 90px;
+            height: 90px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .progress-circle:hover {
+            transform: scale(1.1);
+        }
+
+        .progress-circle svg {
+            transform: rotate(-90deg);
+        }
+
+        .progress-bg {
+            fill: none;
+            stroke: #2d1b3d;
+            stroke-width: 8;
+        }
+
+        .progress-bar {
+            fill: none;
+            stroke: #d946ef;
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #d946ef;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        /* ===== OPTIONS PAGE ===== */
+        .options-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 60px 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .options-image-container {
+            width: 140px;
+            height: 100px;
+            background: #2D3748;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: scaleIn 0.6s ease-out;
+        }
+
+        .options-image-container:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            max-width: 280px;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .option-btn {
+            background: linear-gradient(135deg, #e8ecf1 0%, #d8dfe8 100%);
+            border: none;
+            border-radius: 20px;
+            padding: 14px 20px;
+            color: #8b4d9e;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            text-align: left;
+            width: 100%;
+        }
+
+        .option-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 77, 158, 0.25);
+        }
+
+        .option-btn:active {
+            transform: translateY(0);
+        }
+
+        .option-btn.selected {
+            background: linear-gradient(135deg, #8b4d9e 0%, #6d3d7e 100%);
+            color: #ffffff;
+        }
+
+        /* ===== NAVIGATION ===== */
+        .nav-footer {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 20;
+        }
+
+        .nav-btn {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: scale(1.1);
+            border-color: rgba(255, 255, 255, 0.7);
+        }
+
+        .nav-btn.active {
+            background: rgba(139, 92, 246, 0.5);
+            border-color: rgba(139, 92, 246, 0.8);
+        }
+
+        .nav-btn i {
+            font-size: 22px;
+            color: #8B5CF6;
+        }
+
+        .nav-btn.active i {
+            color: white;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .mobile-container {
+                height: 100vh;
+                max-height: 800px;
+                border-radius: 15px;
+            }
+            
+            .welcome-content,
+            .profile-content,
+            .options-content {
+                padding: 40px 30px;
+            }
+            
+            .welcome-text {
+                font-size: 24px;
+                margin-bottom: 60px;
+            }
+            
+            .image-container,
+            .options-image-container {
+                width: 120px;
+                height: 85px;
+                margin-bottom: 60px;
+            }
+
+            .shop-button {
+                font-size: 18px;
+                padding: 15px 40px;
+            }
+
+            .avatar-bg {
+                width: 120px;
+                height: 120px;
+            }
+
+            .avatar-icon {
+                font-size: 60px;
+            }
+
+            .username {
+                font-size: 20px;
+            }
+
+            .stats-container {
+                gap: 20px;
+            }
+
+            .progress-circle {
+                width: 80px;
+                height: 80px;
+            }
+
+            .progress-text {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .welcome-text {
+                font-size: 20px;
+                margin-bottom: 50px;
+            }
+            
+            .image-container,
+            .options-image-container {
+                width: 100px;
+                height: 70px;
+            }
+            
+            .shop-button {
+                font-size: 16px;
+                padding: 12px 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="mobile-container">
+        <!-- Formas decorativas -->
+        <div class="shape circle-top-left"></div>
+        <div class="shape circle-top-right"></div>
+        <div class="shape circle-bottom"></div>
+        
+        <!-- PÁGINA WELCOME -->
+        <div class="page welcome-page" id="welcomePage">
+            <div class="welcome-content">
+                <h1 class="welcome-text">Welcome to<br>My Store</h1>
+                
+                <div class="image-container">
+                    <div class="landscape-icon">
+                        <div class="sun"></div>
+                        <div class="cloud"></div>
+                        <div class="mountain-1"></div>
+                        <div class="mountain-2"></div>
+                    </div>
+                </div>
+                
+                <button class="shop-button" onclick="handleShopClick()">Shop</button>
+            </div>
+        </div>
+
+        <!-- PÁGINA PROFILE -->
+        <div class="page profile-page hidden-right" id="profilePage">
+            <div class="profile-content">
+                <div class="avatar-container">
+                    <div class="avatar-bg">
+                        <i class="fas fa-user avatar-icon"></i>
+                    </div>
+                </div>
+                
+                <div class="username">YOUR NAME</div>
+                
+                <div class="stats-container">
+                    <div class="progress-circle" data-progress="75">
+                        <svg width="90" height="90">
+                            <circle class="progress-bg" cx="45" cy="45" r="38"></circle>
+                            <circle class="progress-bar" cx="45" cy="45" r="38" 
+                                    stroke-dasharray="238.76" 
+                                    stroke-dashoffset="238.76"></circle>
+                        </svg>
+                        <div class="progress-text">75%</div>
+                    </div>
+                    
+                    <div class="progress-circle" data-progress="85">
+                        <svg width="90" height="90">
+                            <circle class="progress-bg" cx="45" cy="45" r="38"></circle>
+                            <circle class="progress-bar" cx="45" cy="45" r="38" 
+                                    stroke-dasharray="238.76" 
+                                    stroke-dashoffset="238.76"></circle>
+                        </svg>
+                        <div class="progress-text">85%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PÁGINA OPTIONS -->
+        <div class="page options-page hidden-right" id="optionsPage">
+            <div class="options-content">
+                <div class="options-image-container">
+                    <div class="landscape-icon">
+                        <div class="sun"></div>
+                        <div class="mountain-1"></div>
+                        <div class="mountain-2"></div>
+                    </div>
+                </div>
+                
+                <div class="options-container">
+                    <button class="option-btn" onclick="handleOption(1)">OPTION 01</button>
+                    <button class="option-btn" onclick="handleOption(2)">OPTION 02</button>
+                    <button class="option-btn" onclick="handleOption(3)">OPTION 03</button>
+                    <button class="option-btn" onclick="handleOption(4)">OPTION 04</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- NAVEGACIÓN -->
+        <div class="nav-footer">
+            <div class="nav-btn active" onclick="navigateToPage('welcome')" role="button" tabindex="0" aria-label="Home">
+                <i class="fas fa-home"></i>
+            </div>
+            <div class="nav-btn" onclick="navigateToPage('profile')" role="button" tabindex="0" aria-label="Profile">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="nav-btn" onclick="navigateToPage('options')" role="button" tabindex="0" aria-label="Options">
+                <i class="fas fa-star"></i>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Estado de la aplicación encapsulado
+        const app = {
+            currentPage: 'welcome',
+            isNavigating: false,
+            selectedOption: null
+        };
+
+        const SWIPE_THRESHOLD = 80;
+        let startX, startY;
+
+        // Navegación entre páginas
+        function navigateToPage(targetPage) {
+            if (app.isNavigating || app.currentPage === targetPage) return;
+            
+            app.isNavigating = true;
+            
+            const pages = {
+                welcome: document.getElementById('welcomePage'),
+                profile: document.getElementById('profilePage'),
+                options: document.getElementById('optionsPage')
+            };
+            
+            // Ocultar página actual
+            if (app.currentPage === 'welcome') {
+                if (targetPage === 'profile' || targetPage === 'options') {
+                    pages[app.currentPage].classList.add('hidden-left');
+                }
+            } else if (app.currentPage === 'profile') {
+                if (targetPage === 'welcome') {
+                    pages[app.currentPage].classList.add('hidden-right');
+                } else if (targetPage === 'options') {
+                    pages[app.currentPage].classList.add('hidden-left');
+                }
+            } else if (app.currentPage === 'options') {
+                if (targetPage === 'welcome' || targetPage === 'profile') {
+                    pages[app.currentPage].classList.add('hidden-right');
+                }
+            }
+            
+            // Mostrar página objetivo
+            setTimeout(() => {
+                pages[targetPage].classList.remove('hidden-left', 'hidden-right');
+                app.currentPage = targetPage;
+                updateNavButtons();
+                
+                if (targetPage === 'profile') {
+                    setTimeout(() => animateProgressCircles(), 300);
+                }
+                
+                setTimeout(() => app.isNavigating = false, 350);
+            }, 50);
+        }
+
+        function updateNavButtons() {
+            const navButtons = document.querySelectorAll('.nav-btn');
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            
+            const pageIndex = app.currentPage === 'welcome' ? 0 : app.currentPage === 'profile' ? 1 : 2;
+            navButtons[pageIndex].classList.add('active');
+        }
+
+        // WELCOME PAGE
+        function handleShopClick() {
+            const button = document.querySelector('.shop-button');
+            const originalText = button.textContent;
+            
+            button.style.transform = 'scale(0.95)';
+            
+            if (navigator.vibrate) navigator.vibrate(50);
+            
+            setTimeout(() => {
+                button.style.transform = 'scale(1)';
+                button.style.background = 'rgba(34, 197, 94, 0.9)';
+                button.style.color = 'white';
+                button.textContent = 'Success! 🛍️';
+                
+                setTimeout(() => {
+                    button.style.background = '';
+                    button.style.color = '';
+                    button.textContent = originalText;
+                }, 1500);
+            }, 150);
+        }
+
+        // PROFILE PAGE
+        function animateProgressCircles() {
+            const circles = document.querySelectorAll('.progress-circle');
+            
+            circles.forEach((circle, index) => {
+                const progressBar = circle.querySelector('.progress-bar');
+                const progress = parseInt(circle.dataset.progress);
+                const circumference = 238.76;
+                
+                setTimeout(() => {
+                    const offset = circumference - (circumference * progress / 100);
+                    progressBar.style.strokeDashoffset = offset;
+                }, 500 + (index * 200));
+            });
+        }
+
+        // OPTIONS PAGE
+        function handleOption(optionNumber) {
+            const buttons = document.querySelectorAll('.option-btn');
+            const selectedBtn = buttons[optionNumber - 1];
+            
+            if (navigator.vibrate) navigator.vibrate(50);
+            
+            buttons.forEach(btn => btn.classList.remove('selected'));
+            selectedBtn.classList.add('selected');
+            app.selectedOption = optionNumber;
+            
+            selectedBtn.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                selectedBtn.style.transform = 'scale(1)';
+            }, 150);
+        }
+
+        // Parallax effect (solo en desktop)
+        if (window.innerWidth > 768) {
+            document.addEventListener('mousemove', (e) => {
+                const shapes = document.querySelectorAll('.shape');
+                const x = e.clientX / window.innerWidth;
+                const y = e.clientY / window.innerHeight;
+                
+                shapes.forEach((shape, index) => {
+                    const speed = (index + 1) * 0.3;
+                    const xPos = (x - 0.5) * speed * 10;
+                    const yPos = (y - 0.5) * speed * 10;
+                    
+                    shape.style.transform = `translate(${xPos}px, ${yPos}px)`;
+                });
+            });
+        }
+
+        // Gestos touch
+        document.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            if (!startX || !startY) return;
+            
+            const endX = e.changedTouches[0].clientX;
+            const endY = e.changedTouches[0].clientY;
+            
+            const diffX = startX - endX;
+            const diffY = startY - endY;
+            
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > SWIPE_THRESHOLD) {
+                if (diffX > 0) {
+                    if (app.currentPage === 'welcome') navigateToPage('profile');
+                    else if (app.currentPage === 'profile') navigateToPage('options');
+                } else {
+                    if (app.currentPage === 'options') navigateToPage('profile');
+                    else if (app.currentPage === 'profile') navigateToPage('welcome');
+                }
+            }
+            
+            startX = startY = null;
+        });
+
+        // Navegación con teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                if (app.currentPage === 'profile') navigateToPage('welcome');
+                else if (app.currentPage === 'options') navigateToPage('profile');
+            } else if (e.key === 'ArrowRight') {
+                if (app.currentPage === 'welcome') navigateToPage('profile');
+                else if (app.currentPage === 'profile') navigateToPage('options');
+            }
+        });
+
+        // Inicialización
+        window.addEventListener('load', () => {
+            updateNavButtons();
+        });
+    </script>
+</body>
+</html>
